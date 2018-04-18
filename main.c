@@ -7,21 +7,21 @@ struct simpul
     int data, prior;
     Node *next;
 };
-void insert_awal();
-void insert_akhir();
+void insert_first();
+void insert_last();
 void insert_before();
-void alokasi();
+void allocation();
 void enqueue();
 void dequeue();
 void free_node(Node *);
 void tampil();
-Node *head = NULL , *p, *cari, *pbef, *hapus, *ph;
+Node *head = NULL , *p, *search, *pbef;
 
 int main()
 {
     printf("Queue With Priority\n");
-    printf("1. Input a Queue Value (Enqueue)\n");
-    printf("2. Output a Queue Value (Dequeue)\n");
+    printf("1. Push a Value (Enqueue)\n");
+    printf("2. Pull a Value (Dequeue)\n");
     printf("3. Read Whole Queue (LIFO)\n");
 
     int menu;
@@ -43,29 +43,29 @@ int main()
 }
 void enqueue()
 {
-    alokasi();
-    cari = head;
+    allocation();
+    search = head;
     if(head == NULL)
         head = p;
     else
     {
-        while(cari->prior <= p->prior)
+        while(search->prior <= p->prior)
         {
-            if(cari->next == NULL)
+            if(search->next == NULL)
                 break;
             else{
-                pbef = cari;
-                cari = cari->next;
+                pbef = search;
+                search = search->next;
             }
         }
-        if(cari->next==NULL && cari->prior <= p->prior)
+        if(search->next==NULL && search->prior <= p->prior)
             insert_akhir();
         else
             insert_before();
     }
 }
 
-void alokasi()
+void allocation()
 {
     p = (Node *)malloc(sizeof(Node));
     if(p == NULL)
@@ -94,25 +94,24 @@ void tampil()
             baca = baca->next;
         }
     }
-    puts("");
 }
-void insert_awal()
+void insert_first()
 {
     p->next = head;
     head = p;
 }
-void insert_akhir()
+void insert_last()
 {
-    cari->next = p ;
-    cari = p;
+    search->next = p ;
+    search = p;
 }
 
 void insert_before()
 {
-    if(cari == head)
+    if(search == head)
         insert_awal();
     else{
-        p->next = cari;
+        p->next = search;
         pbef->next = p;
     }
 }
@@ -122,15 +121,14 @@ void dequeue()
         printf("Queue is empty!\n");
     else
     {
-        printf("%d\n", head->data);
-        cari=head;
-        if(cari->next==NULL)
+        printf("Dequeue -> %d\n", head->data);
+        search=head;
+        if(search->next==NULL)
             head=NULL;
         else
-            head=cari->next;
-        free_node(cari);
+            head=search->next;
+        free_node(search);
     }
-    printf("\n");
 }
 void free_node(Node *x)
 {
